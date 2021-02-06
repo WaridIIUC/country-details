@@ -17,6 +17,9 @@
 
         <div id="parent" class="row">
         </div>
+        <div id="single-country">
+
+        </div>
     </div>
 
     <script>
@@ -28,8 +31,8 @@
                     displayData(data);
                 })
         }
+        const parent = document.getElementById("parent");
         function displayData(data){
-            const parent = document.getElementById("parent");
             
             // parent.style.display = "grid";
             // parent.style.gridTemplateColumns = "repeat(4,1fr)";
@@ -41,7 +44,7 @@
                 div.id = data[i].alpha2Code;
                 div.style.border = "2px solid green";
                 div.style.margin = "10px";
-                div.style.width = "200px";
+                div.style.width = "400px";
               
                 
                 //console.log(div.id);
@@ -49,19 +52,43 @@
                 countryName.innerText = data[i].name;
                 div.appendChild(countryName);
 
-                const capitalName = document.createElement("h3");
+                const capitalName = document.createElement("h5");
                 capitalName.innerText = "Capital Name: "+ data[i].capital;
                 div.appendChild(capitalName);
 
                 
                 const flagImg = document.createElement("img");
                 flagImg.src = data[i].flag;
-                flagImg.style.width = "90%"
+                flagImg.style.width = "200px"
+                flagImg.style.height = "100px"
                 div.appendChild(flagImg);
 
                 parent.appendChild(div);
 
             }
+
+            const singleCountry = document.getElementById("single-country");
+            singleCountry.style.display = "none";
+            parent.addEventListener("click", function(event){
+                 alert(event.target.id);
+                countryCode = event.target.id;
+                fetch(`https://restcountries.eu/rest/v2/alpha/${countryCode}`)
+                .then(res => res.json())
+                .then(data => {
+                    singleCountry.style.display = "block";
+                    const countryName = document.createElement("h2");
+                    countryName.innerText = data.name;
+                    singleCountry.appendChild(countryName);
+
+                    const callingCodes = document.createElement("h4");
+                    callingCodes.innerText = data.callingCodes;
+                    singleCountry.appendChild(callingCodes);
+                    parent.style.display ="none";
+
+
+                })
+            })
+            
             
         }
     </script>
